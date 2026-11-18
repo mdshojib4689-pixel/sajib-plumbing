@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>এমএস সজীব প্লাম্বিং রিপেয়ার সার্ভিস</title>
+    <style>
+        body {
+            font-family: 'SolaimanLipi', Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #d9534f;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            padding: 15px;
+            max-width: 600px;
+            margin: auto;
+        }
+        .card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-call {
+            background-color: #007bff;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>🚨 এমএস সজীব প্লাম্বিং রিপেয়ার সার্ভিস</h2>
+    <p>পাইপ ফেটে যাওয়া বা যেকোনো জরুরি মেরামতে তাৎক্ষণিক যোগাযোগ করুন</p>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h3>📞 সরাসরি কল করুন</h3>
+        <a href="tel:01540353717" class="btn btn-call">ফোন করুন: 01540353717</a>
+        <a href="tel:01767309874" class="btn btn-call">বিকল্প নম্বর: 01767309874</a>
+    </div>
+
+    <div class="card">
+        <h3>📍 জরুরি সার্ভিস বুকিং ফর্ম</h3>
+        <form id="bookingForm" onsubmit="sendWhatsApp(event)">
+            <label>আপনার নাম:</label>
+            <input type="text" id="custName" required placeholder="আপনার নাম লিখুন">
+
+            <label>মোবাইল নম্বর:</label>
+            <input type="tel" id="custPhone" required placeholder="আপনার ফোন নম্বর">
+
+            <label>সমস্যার বিবরণ (যেমন: পাইপ ফেটে গেছে):</label>
+            <textarea id="custProblem" rows="3" required placeholder="সমস্যাটি এখানে লিখুন..."></textarea>
+
+            <button type="button" class="btn" style="background-color: #ffc107; color: black;" onclick="getLocation()">📍 আমার বর্তমান লোকেশন যুক্ত করুন</button>
+            <p id="locationStatus" style="font-size: 14px; color: #666; margin-top: 5px;"></p>
+
+            <button type="submit" class="btn">💬 হোয়াটসঅ্যাপে লোকেশন ও সমস্যা পাঠান</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    let userLocation = "";
+
+    function getLocation() {
+        const status = document.getElementById("locationStatus");
+        if (!navigator.geolocation) {
+            status.innerHTML = "আপনার ব্রাউজার লোকেশন সাপোর্ট করে না।";
+            return;
+        }
+        status.innerHTML = "লোকেশন নেওয়া হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...";
+        navigator.geolocation.getCurrentPosition((position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            userLocation = `https://maps.google.com/?q=${lat},${lon}`;
+            status.innerHTML = "✅ লোকেশন সফলভাবে যুক্ত হয়েছে!";
+        }, () => {
+            status.innerHTML = "❌ লোকেশন পাওয়া যায়নি। দয়া করে জিপিএস চালু করুন।";
+        });
+    }
+
+    function sendWhatsApp(event) {
+        event.preventDefault();
+        const name = document.getElementById("custName").value;
+        const phone = document.getElementById("custPhone").value;
+        const problem = document.getElementById("custProblem.value").value || document.getElementById("custProblem").value;
+
+        let message = `জরুরি প্লাম্বিং কাজ প্রয়োজন!\n\nনাম: ${name}\nনম্বর: ${phone}\nসমস্যা: ${problem}`;
+        if (userLocation) {
+            message += `\nলোকেশন: ${userLocation}`;
+        }
+
+        const encodedMessage = encodeURIComponent(message);
+        window.open(`https://wa.me/8801540353717?text=${encodedMessage}`, '_blank');
+    }
+</script>
+
+</body>
+</html>
